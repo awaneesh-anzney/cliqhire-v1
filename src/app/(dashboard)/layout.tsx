@@ -1,52 +1,38 @@
-'use client';
+"use client"
 
-import { useState, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { useAuthStore } from '@/store/auth.store';
-import Sidebar from '@/components/layout/Sidebar';
-import TopBar from '@/components/layout/TopBar';
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/store/auth.store"
+import Sidebar from "@/components/layout/Sidebar"
+import TopBar from "@/components/layout/TopBar"
+import { SidebarProvider } from "@/components/ui/sidebar"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const router = useRouter()
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/login');
+      router.push("/login")
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, router])
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated) return null
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      {/* Sidebar */}
-      <Sidebar
-        collapsed={!sidebarOpen}
-        mobileOpen={mobileSidebarOpen}
-        onMobileClose={() => setMobileSidebarOpen(false)}
-      />
+    <SidebarProvider>
+      <div className="flex h-screen overflow-hidden bg-background">
+        {/* Sidebar */}
+        <Sidebar />
 
-      {/* Mobile overlay */}
-      {mobileSidebarOpen && (
-        <div
-          className="fixed inset-0 z-20 bg-black/50 lg:hidden"
-          onClick={() => setMobileSidebarOpen(false)}
-        />
-      )}
-
-      {/* Main Area */}
-      <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
-        <TopBar
-          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-          onMobileMenu={() => setMobileSidebarOpen(true)}
-        />
-        <main className="flex-1 overflow-y-auto p-6">
-          {children}
-        </main>
+        {/* Main content area */}
+        <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
+          <TopBar />
+          <main className="flex-1 overflow-y-auto p-6">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
-  );
+    </SidebarProvider>
+  )
 }

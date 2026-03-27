@@ -6,32 +6,53 @@
 
 @import "tw-animate-css";
 
-@import "shadcn/tailwind.css";
+/* ──────────────────────────────────────────────────────────────
+   Design Tokens — single source of truth for all CSS variables
+   ────────────────────────────────────────────────────────────── */
 
 :root {
-  --font-geist-sans: 'DM Sans', sans-serif;
-  --font-geist-mono: 'DM Mono', monospace;
-  --font-clash: 'DM Sans', sans-serif;
+  /* Typography */
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'DM Mono', monospace;
   --radius: 0.625rem;
 
-  /* ── Light Theme ──────────────────────────────────────────────── */
+  /* Base surfaces */
+  --background: 220 20% 98%;
+  --foreground: 224 21% 12%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 224 21% 12%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 224 21% 12%;
 
   --surface: 0 0% 100%;
   --surface-elevated: 220 14% 96%;
   --surface-overlay: 220 13% 91%;
 
+  /* Borders & muted */
   --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 243 75% 59%;
+
   --muted: 220 14% 96%;
   --muted-foreground: 220 9% 46%;
 
+  /* Primary — indigo */
   --primary: 243 75% 59%;
   --primary-foreground: 0 0% 100%;
   --primary-muted: 243 75% 95%;
 
-  --accent: 199 89% 48%;
-  --accent-foreground: 0 0% 100%;
+  /* Secondary */
+  --secondary: 220 14% 96%;
+  --secondary-foreground: 224 21% 12%;
+
+  /* Accent — sky */
+  --accent: 220 14% 96%;
+  --accent-foreground: 224 21% 12%;
   --accent-muted: 199 89% 93%;
 
+  /* Semantic */
   --success: 142 71% 45%;
   --success-foreground: 0 0% 100%;
   --success-muted: 142 71% 93%;
@@ -43,17 +64,36 @@
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
   --destructive-muted: 0 84% 94%;
+
+  /* Sidebar tokens (shadcn sidebar convention) */
+  --sidebar: 220 20% 98%;
+  --sidebar-foreground: 224 21% 16%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-primary: 243 75% 59%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 243 75% 95%;
+  --sidebar-accent-foreground: 243 75% 40%;
+  --sidebar-ring: 243 75% 59%;
 }
 
 .dark {
   --background: 224 21% 9%;
   --foreground: 213 31% 91%;
 
+  --card: 224 21% 12%;
+  --card-foreground: 213 31% 91%;
+
+  --popover: 224 21% 12%;
+  --popover-foreground: 213 31% 91%;
+
   --surface: 224 21% 12%;
   --surface-elevated: 224 21% 15%;
   --surface-overlay: 224 21% 18%;
 
   --border: 224 21% 20%;
+  --input: 224 21% 20%;
+  --ring: 243 75% 65%;
+
   --muted: 224 21% 15%;
   --muted-foreground: 218 11% 55%;
 
@@ -61,8 +101,11 @@
   --primary-foreground: 0 0% 100%;
   --primary-muted: 243 45% 20%;
 
-  --accent: 199 89% 52%;
-  --accent-foreground: 0 0% 100%;
+  --secondary: 224 21% 15%;
+  --secondary-foreground: 213 31% 91%;
+
+  --accent: 224 21% 15%;
+  --accent-foreground: 213 31% 91%;
   --accent-muted: 199 60% 16%;
 
   --success: 142 71% 50%;
@@ -76,33 +119,55 @@
   --destructive: 0 84% 65%;
   --destructive-foreground: 0 0% 100%;
   --destructive-muted: 0 50% 16%;
+
+  /* Sidebar dark */
+  --sidebar: 224 21% 12%;
+  --sidebar-foreground: 213 31% 85%;
+  --sidebar-border: 224 21% 20%;
+  --sidebar-primary: 243 75% 65%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 243 45% 20%;
+  --sidebar-accent-foreground: 243 75% 80%;
+  --sidebar-ring: 243 75% 65%;
 }
 
-* {
-  border-color: hsl(var(--border));
+/* ── Global resets ─────────────────────────────────────────── */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    @apply antialiased;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
-body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-family: var(--font-geist-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/* ── Tailwind token mapping ────────────────────────────────── */
+/* All hsl() calls use the CSS vars above so Tailwind bg-primary etc. work */
 
-/* ── Scrollbar ─────────────────────────────────────────────────── */
+/* ── Scrollbar ─────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground)); }
 
-/* ── Focus Ring ────────────────────────────────────────────────── */
+/* ── Focus Ring ────────────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid hsl(var(--primary));
   outline-offset: 2px;
 }
 
-/* ── Shimmer Skeleton ──────────────────────────────────────────── */
+/* ── Skeleton shimmer ──────────────────────────────────────── */
 .skeleton {
   background: linear-gradient(
     90deg,
@@ -115,99 +180,35 @@ body {
   border-radius: calc(var(--radius) - 2px);
 }
 
-/* ── Sidebar Transition ────────────────────────────────────────── */
+/* ── Sidebar nav items ─────────────────────────────────────── */
 .sidebar-item {
   transition: all 0.15s ease;
 }
 .sidebar-item:hover {
-  background: hsl(var(--primary-muted));
-  color: hsl(var(--primary));
+  background: hsl(var(--sidebar-accent));
+  color: hsl(var(--sidebar-accent-foreground));
 }
-.sidebar-item.active {
-  background: hsl(var(--primary-muted));
-  color: hsl(var(--primary));
+.sidebar-item[data-active="true"] {
+  background: hsl(var(--sidebar-accent));
+  color: hsl(var(--sidebar-primary));
   font-weight: 500;
 }
 
-@layer base {
-  .theme {
-    --font-heading: var(--font-sans);
-    --font-sans: var(--font-sans);
-  }
-  :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
-  }
-  .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
-  }
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
-  }
+/* ── Custom animations ─────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
 }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+.animate-fade-in      { animation: fade-in      0.3s  ease-out; }
+.animate-slide-in-left { animation: slide-in-left 0.25s ease-out; }
