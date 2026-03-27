@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation';
-
-export default function RootPage() {
-  redirect('/dashboard');
-}
+// Landing page is at (marketing)/page.tsx
+// Re-export so "/" route shows the landing page
+export { default } from './(marketing)/page';
