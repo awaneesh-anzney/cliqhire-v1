@@ -1,142 +1,129 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ──────────────────────────────────────────────────────────────
-   Design Tokens — single source of truth for all CSS variables
-   ────────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* Fonts */
+    --font-sans: 'JetBrains Mono', monospace;
+    --font-mono: 'JetBrains Mono', monospace;
+    --radius: 0.5rem;
 
-:root {
-  /* Typography */
-  --font-sans: 'DM Sans', system-ui, sans-serif;
-  --font-mono: 'DM Mono', monospace;
-  --radius: 0.625rem;
+    /* Base Neutrals (Soft White / Navy Tint background) */
+    --background: 210 40% 98%;      /* Soft white (navy tint) */
+    --foreground: 222 47% 11%;      /* Navy text */
 
-  /* Base surfaces */
-  --background: 220 20% 98%;
-  --foreground: 224 21% 12%;
+    /* Cards & Popovers */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
-  --card: 0 0% 100%;
-  --card-foreground: 224 21% 12%;
+    /* Primary: Blue */
+    --primary: 221 83% 53%;         /* Primary Blue */
+    --primary-foreground: 0 0% 100%; /* White on Blue */
+    --primary-muted: 214 100% 97%;   /* Tint (light blue) */
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 224 21% 12%;
+    /* Secondary: Navy */
+    --secondary: 222 47% 11%;        /* Navy */
+    --secondary-foreground: 0 0% 100%; /* White on Navy */
 
-  --surface: 0 0% 100%;
-  --surface-elevated: 220 14% 96%;
-  --surface-overlay: 220 13% 91%;
+    /* Success: Green */
+    --success: 142 71% 45%;          /* Green */
+    --success-foreground: 0 0% 100%;   /* White on Green */
+    --success-muted: 149 80% 90%;      /* Mint (light green) */
 
-  /* Borders & muted */
-  --border: 220 13% 91%;
-  --input: 220 13% 91%;
-  --ring: 243 75% 59%;
+    /* Warning: Amber */
+    --warning: 38 92% 50%;           /* Amber */
+    --warning-foreground: 0 0% 100%;   /* White on Amber */
+    --warning-muted: 48 100% 96%;      /* Cream (light amber) */
 
-  --muted: 220 14% 96%;
-  --muted-foreground: 220 9% 46%;
+    /* Destructive (Red fallback for generic errors if needed) */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-muted: 0 84% 96%;
 
-  /* Primary — indigo */
-  --primary: 243 75% 59%;
-  --primary-foreground: 0 0% 100%;
-  --primary-muted: 243 75% 95%;
+    /* Accents (maps to primary tint by default in shadcn) */
+    --accent: 214 100% 97%;          /* Tint (light blue) */
+    --accent-foreground: 221 83% 53%;
 
-  /* Secondary */
-  --secondary: 220 14% 96%;
-  --secondary-foreground: 224 21% 12%;
+    /* UI Elements */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-  /* Accent — sky */
-  --accent: 220 14% 96%;
-  --accent-foreground: 224 21% 12%;
-  --accent-muted: 199 89% 93%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;             /* Ring matches Primary Blue */
 
-  /* Semantic */
-  --success: 142 71% 45%;
-  --success-foreground: 0 0% 100%;
-  --success-muted: 142 71% 93%;
+    /* Sidebar matching the new design system */
+    --sidebar: 210 40% 98%;          /* Soft white */
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 214 100% 97%;  /* Tint (light blue) */
+    --sidebar-accent-foreground: 221 83% 53%;
+    --sidebar-ring: 221 83% 53%;
+  }
 
-  --warning: 38 92% 50%;
-  --warning-foreground: 0 0% 100%;
-  --warning-muted: 38 92% 93%;
+  .dark {
+    /* Dark mode maps mostly reversed, preserving hues */
+    --background: 222 47% 11%;       /* Navy as background */
+    --foreground: 210 40% 98%;       /* Soft white text */
 
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --destructive-muted: 0 84% 94%;
+    --card: 222 47% 14%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 14%;
+    --popover-foreground: 210 40% 98%;
 
-  /* Sidebar tokens (shadcn sidebar convention) */
-  --sidebar: 220 20% 98%;
-  --sidebar-foreground: 224 21% 16%;
-  --sidebar-border: 220 13% 91%;
-  --sidebar-primary: 243 75% 59%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 243 75% 95%;
-  --sidebar-accent-foreground: 243 75% 40%;
-  --sidebar-ring: 243 75% 59%;
+    --primary: 221 83% 60%;          /* Lighter Primary Blue */
+    --primary-foreground: 0 0% 100%;
+    --primary-muted: 221 83% 20%;    /* Dark transparent blue */
+
+    --secondary: 210 40% 98%;        /* Soft white on dark */
+    --secondary-foreground: 222 47% 11%; 
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --success-muted: 142 71% 15%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
+    --warning-muted: 38 92% 15%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --destructive-muted: 0 62.8% 15%;
+
+    --accent: 221 83% 20%;
+    --accent-foreground: 210 40% 98%;
+
+    --muted: 223 47% 20%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --border: 223 47% 20%;
+    --input: 223 47% 20%;
+    --ring: 221 83% 60%;
+
+    --sidebar: 222 47% 11%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-border: 223 47% 20%;
+    --sidebar-primary: 221 83% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 221 83% 20%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-ring: 221 83% 60%;
+  }
 }
-
-.dark {
-  --background: 224 21% 9%;
-  --foreground: 213 31% 91%;
-
-  --card: 224 21% 12%;
-  --card-foreground: 213 31% 91%;
-
-  --popover: 224 21% 12%;
-  --popover-foreground: 213 31% 91%;
-
-  --surface: 224 21% 12%;
-  --surface-elevated: 224 21% 15%;
-  --surface-overlay: 224 21% 18%;
-
-  --border: 224 21% 20%;
-  --input: 224 21% 20%;
-  --ring: 243 75% 65%;
-
-  --muted: 224 21% 15%;
-  --muted-foreground: 218 11% 55%;
-
-  --primary: 243 75% 65%;
-  --primary-foreground: 0 0% 100%;
-  --primary-muted: 243 45% 20%;
-
-  --secondary: 224 21% 15%;
-  --secondary-foreground: 213 31% 91%;
-
-  --accent: 224 21% 15%;
-  --accent-foreground: 213 31% 91%;
-  --accent-muted: 199 60% 16%;
-
-  --success: 142 71% 50%;
-  --success-foreground: 0 0% 100%;
-  --success-muted: 142 40% 14%;
-
-  --warning: 38 92% 55%;
-  --warning-foreground: 0 0% 8%;
-  --warning-muted: 38 60% 16%;
-
-  --destructive: 0 84% 65%;
-  --destructive-foreground: 0 0% 100%;
-  --destructive-muted: 0 50% 16%;
-
-  /* Sidebar dark */
-  --sidebar: 224 21% 12%;
-  --sidebar-foreground: 213 31% 85%;
-  --sidebar-border: 224 21% 20%;
-  --sidebar-primary: 243 75% 65%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 243 45% 20%;
-  --sidebar-accent-foreground: 243 75% 80%;
-  --sidebar-ring: 243 75% 65%;
-}
-
-/* ── Global resets ─────────────────────────────────────────── */
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
     box-sizing: border-box;
   }
-
+  
   html {
     font-family: var(--font-sans);
     @apply antialiased;
@@ -150,9 +137,6 @@
   }
 }
 
-/* ── Tailwind token mapping ────────────────────────────────── */
-/* All hsl() calls use the CSS vars above so Tailwind bg-primary etc. work */
-
 /* ── Scrollbar ─────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -161,7 +145,7 @@
 
 /* ── Focus Ring ────────────────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid hsl(var(--primary));
+  outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
 }
 
@@ -170,7 +154,7 @@
   background: linear-gradient(
     90deg,
     hsl(var(--muted)) 0%,
-    hsl(var(--surface-overlay)) 50%,
+    hsl(var(--muted-foreground) / 0.1) 50%,
     hsl(var(--muted)) 100%
   );
   background-size: 200% 100%;
