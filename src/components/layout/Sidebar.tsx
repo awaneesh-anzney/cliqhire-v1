@@ -67,6 +67,7 @@ const navGroups: NavGroup[] = [
     label: "Recruitment",
     items: [
       { label: "Jobs", href: "/dashboard/jobs", icon: Briefcase, permission: "jobs" },
+      { label: "Pipeline", href: "/dashboard/pipeline", icon: Layers, permission: "pipeline" },
       { label: "Candidates", href: "/dashboard/candidates", icon: UserCircle, permission: "candidates" },
       { label: "Applications", href: "/dashboard/applications", icon: Layers, permission: "applications" },
       { label: "Interviews", href: "/dashboard/interviews", icon: CalendarCheck, permission: "interviews" },
