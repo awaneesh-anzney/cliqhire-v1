@@ -1,41 +1,24 @@
-import type { Metadata } from "next"
-import { Toaster } from "sonner"
-import { QueryProvider } from "@/lib/query-provider"
-import "./globals.css"
-import { Inter } from "next/font/google"
-import { cn } from "@/lib/utils"
+import { ReactNode } from "react";
+import "./globals.css";
+import Header from "@/components/landing/Header";
+import Footer from "@/components/landing/Footer";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
-
-export const metadata: Metadata = {
-  title: {
-    template: "%s | CliqHire",
-    default: "CliqHire — ATS Platform",
-  },
-  description: "Multi-tenant Applicant Tracking System",
-}
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans antialiased", inter.variable)}>
-      <body>
-        <QueryProvider>
+    <html lang="en">
+      {/* Body me flex-col add karein taaki footer hamesha niche rahe */}
+      <body className="flex flex-col min-h-screen w-full antialiased">
+        
+        <Header />
+
+        {/* Flex-grow ensures main takes available space */}
+        <main className="flex-grow">
           {children}
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              classNames: {
-                toast: "bg-surface text-foreground border border-border rounded-[var(--radius)] text-sm shadow-lg",
-              },
-            }}
-          />
-        </QueryProvider>
+        </main>
+
+        <Footer />
+
       </body>
     </html>
-  )
+  );
 }

@@ -137,7 +137,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+    <div className="w-full min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
 
       {/* ── Navbar ───────────────────────────────────────────────── */}
       <header className={cn(
@@ -219,8 +219,8 @@ export default function LandingPage() {
       </header>
 
       {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-4xl mx-auto text-center animate-fade-in">
+      <section className="pt-28 pb-5 px-2">
+        <div className="w-full mx-auto text-center animate-fade-in">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[hsl(var(--primary-muted))] border border-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-xs font-medium mb-6">
             <Sparkles className="w-3 h-3" />
@@ -262,7 +262,7 @@ export default function LandingPage() {
         </div>
 
         {/* Hero Visual — Dashboard Preview */}
-        <div className="max-w-5xl mx-auto mt-16">
+        <div className="w-full mx-auto mt-16">
           <div className="relative rounded-2xl border border-[hsl(var(--border))] shadow-2xl shadow-black/5 overflow-hidden bg-[hsl(var(--card))]">
             {/* Fake browser bar */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-[hsl(var(--border))] bg-[hsl(var(--muted))]/50">
@@ -296,8 +296,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── Features ─────────────────────────────────────────────── */}
-      <section id="features" className="py-24 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section id="features" className="py-24 px-2">
+        <div className="w-full mx-auto">
           <SectionHeader
             badge="Features"
             title="Everything your hiring team needs"
@@ -319,13 +319,13 @@ export default function LandingPage() {
 
       {/* ── How it works ─────────────────────────────────────────── */}
       <section id="how-it-works" className="py-24 px-4 bg-[hsl(var(--muted))]/30">
-        <div className="max-w-5xl mx-auto">
+        <div className="w-full mx-auto">
           <SectionHeader
             badge="How it works"
             title="Up and running in minutes"
             sub="No complex setup. No IT required. Just create your workspace and start hiring."
           />
-          <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {STEPS.map((s, i) => (
               <div key={s.step} className="relative">
                 {i < STEPS.length - 1 && (
@@ -345,8 +345,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── Pricing ──────────────────────────────────────────────── */}
-      <section id="pricing" className="py-24 px-4">
-        <div className="max-w-5xl mx-auto">
+      <section id="pricing" className="py-8 px-2">
+        <div className="w-full">
           <SectionHeader
             badge="Pricing"
             title="Simple, transparent pricing"
@@ -412,8 +412,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── Testimonials ─────────────────────────────────────────── */}
-      <section className="py-24 px-4 bg-[hsl(var(--muted))]/30">
-        <div className="max-w-5xl mx-auto">
+      <section className="py-8 px-2 bg-[hsl(var(--muted))]/30">
+        <div className="w-full">
           <SectionHeader
             badge="Testimonials"
             title="Loved by recruitment teams"
@@ -446,8 +446,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA Banner ───────────────────────────────────────────── */}
-      <section className="py-24 px-4">
-        <div className="max-w-3xl mx-auto text-center bg-[hsl(var(--primary))] rounded-3xl p-12 shadow-2xl shadow-[hsl(var(--primary))]/20">
+      <section className="py-8 px-2">
+        <div className="w-full text-center bg-[hsl(var(--primary))] rounded-3xl p-12 shadow-2xl shadow-[hsl(var(--primary))]/20">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">
             Ready to transform your hiring?
           </h2>
@@ -471,28 +471,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
-      {/* ── Footer ───────────────────────────────────────────────── */}
-      <footer className="border-t border-[hsl(var(--border))] py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-[hsl(var(--primary))] flex items-center justify-center">
-                <Briefcase className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="font-bold text-sm">ATS Platform</span>
-            </div>
-            <div className="flex items-center gap-6 text-xs text-[hsl(var(--muted-foreground))]">
-              <a href="#" className="hover:text-[hsl(var(--foreground))] transition-colors">Privacy</a>
-              <a href="#" className="hover:text-[hsl(var(--foreground))] transition-colors">Terms</a>
-              <a href="#" className="hover:text-[hsl(var(--foreground))] transition-colors">Contact</a>
-            </div>
-            <p className="text-xs text-[hsl(var(--muted-foreground))]">
-              © {new Date().getFullYear()} ATS Platform. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
