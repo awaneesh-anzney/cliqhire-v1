@@ -9,9 +9,8 @@ import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { Eye, EyeOff, Loader2, Briefcase, ArrowRight } from 'lucide-react';
-import { authApi } from '@/lib/api';
-import { useAuthStore } from '@/store/auth.store';
 import { cn } from '@/lib/utils';
+import { useLogin } from '@/hooks/useAuth';
 
 const schema = z.object({
   tenantSlug: z.string().min(1, 'Workspace ID required'),
@@ -23,7 +22,6 @@ type FormData = z.infer<typeof schema>;
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const setAuth = useAuthStore((s) => s.setAuth);
   const [showPass, setShowPass] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
@@ -35,19 +33,20 @@ function LoginForm() {
     },
   });
 
-  const loginMutation = useMutation({
-    mutationFn: authApi.login,
-    onSuccess: (data) => {
-      setAuth({ accessToken: data.accessToken, refreshToken: data.refreshToken }, data.user);
-      toast.success(`Welcome back, ${data.user.name.split(' ')[0]}!`);
-      router.push('/dashboard');
-    },
-    onError: (err: unknown) => {
-      const msg = (err as { response?: { data?: { message?: string } } })
-        ?.response?.data?.message ?? 'Invalid credentials';
-      toast.error(typeof msg === 'string' ? msg : 'Login failed');
-    },
-  });
+  const loginMutation = useLogin();
+  const handleLogin = (data: FormData) => {
+    loginMutation.mutate(data, {
+      onSuccess: (res) => {
+        toast.success(`Welcome back, ${res.user.name.split(' ')[0]}!`);
+        router.push('/dashboard');
+      },
+      onError: (err: unknown) => {
+        const msg = (err as { response?: { data?: { message?: string } } })
+          ?.response?.data?.message ?? 'Invalid credentials';
+        toast.error(typeof msg === 'string' ? msg : 'Login failed');
+      }
+    });
+  };
 
   return (
     <div className="min-h-screen flex bg-[hsl(var(--background))]">
@@ -104,7 +103,7 @@ function LoginForm() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit((d) => loginMutation.mutate(d))} className="space-y-4">
+          <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
             {/* Workspace slug */}
             <Field label="Workspace ID" error={errors.tenantSlug?.message}>
               <input

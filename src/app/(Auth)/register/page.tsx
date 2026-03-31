@@ -1,19 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import {
   Briefcase, ArrowRight, ArrowLeft, Eye, EyeOff,
-  Loader2, Check, Building2, User,
+  Loader2, Check, Building2, User, Copy,
 } from 'lucide-react';
-import apiClient from '@/lib/axios';
 import { cn } from '@/lib/utils';
+import { useRegister } from '@/hooks/useAuth';
+import type { RegisterResponse } from '@/types/auth';
 
 // ─── Schemas per step ─────────────────────────────────────────────
 const step1Schema = z.object({
@@ -46,10 +46,12 @@ const toSlug = (str: string) =>
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [step1Data, setStep1Data] = useState<Step1Data | null>(null);
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [workspaceUrl, setWorkspaceUrl] = useState('');
+  const [countdown, setCountdown] = useState(5);
 
   // ── Step 1 form ──────────────────────────────────────────────────
   const form1 = useForm<Step1Data>({
@@ -73,26 +75,17 @@ export default function RegisterPage() {
   });
 
   // ── Register mutation ────────────────────────────────────────────
-  const registerMutation = useMutation({
-    mutationFn: (data: AllData) =>
-      apiClient.post('/auth/register', {
-        orgType: data.orgType,
-        companyName: data.companyName,
-        tenantSlug: data.tenantSlug,
-        adminName: data.name,
-        adminEmail: data.email,
-        adminPassword: data.password,
-      }).then((r) => r.data),
-    onSuccess: () => {
-      toast.success('Workspace created! Please sign in.');
+  const registerMutation = useRegister();
+  
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (step === 3 && countdown > 0) {
+      timer = setTimeout(() => setCountdown(c => c - 1), 1000);
+    } else if (step === 3 && countdown === 0) {
       router.push(`/login?slug=${step1Data?.tenantSlug}`);
-    },
-    onError: (err: unknown) => {
-      const msg = (err as { response?: { data?: { message?: string } } })
-        ?.response?.data?.message;
-      toast.error(typeof msg === 'string' ? msg : 'Registration failed. Slug may already be taken.');
-    },
-  });
+    }
+    return () => clearTimeout(timer);
+  }, [step, countdown, router, step1Data]);
 
   const onStep1 = (data: Step1Data) => {
     setStep1Data(data);
@@ -101,7 +94,17 @@ export default function RegisterPage() {
 
   const onStep2 = (data: Step2Data) => {
     if (!step1Data) return;
-    registerMutation.mutate({ ...step1Data, ...data });
+    registerMutation.mutate({ ...step1Data, adminName: data.name, adminEmail: data.email, adminPassword: data.password }, {
+      onSuccess: (res: RegisterResponse) => {
+        toast.success('Workspace created! Preparing dashboard...');
+        setWorkspaceUrl(res.workspaceUrl);
+        setStep(3);
+      },
+      onError: (err: unknown) => {
+        const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+        toast.error(typeof msg === 'string' ? msg : 'Registration failed. Slug may already be taken.');
+      }
+    });
   };
 
   const passwordValue = form2.watch('password');
@@ -180,6 +183,19 @@ export default function RegisterPage() {
                 {s < 2 && <div className="w-8 h-px bg-[hsl(var(--border))]" />}
               </div>
             ))}
+            <div className="flex items-center gap-2">
+              <div className={cn(
+                'w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-all',
+                step === 3
+                  ? 'bg-[hsl(var(--primary))] text-white'
+                  : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]',
+              )}>
+                3
+              </div>
+              <span className={cn('text-xs', step === 3 ? 'text-[hsl(var(--foreground))] font-medium' : 'text-[hsl(var(--muted-foreground))]')}>
+                Ready
+              </span>
+            </div>
           </div>
 
           {/* ── STEP 1 ─────────────────────────────────────────── */}
@@ -382,6 +398,53 @@ export default function RegisterPage() {
                 </button>
               </form>
             </>
+          )}
+
+          {/* ── STEP 3 ─────────────────────────────────────────── */}
+          {step === 3 && (
+            <div className="text-center animate-fade-in space-y-6">
+              <div className="mx-auto w-16 h-16 bg-[hsl(var(--success-muted))] rounded-full flex items-center justify-center mb-4">
+                <Check className="w-8 h-8 text-[hsl(var(--success))]" />
+              </div>
+              <h2 className="text-2xl font-extrabold text-[hsl(var(--foreground))]">You're all set!</h2>
+              <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                Your workspace has been successfully created. Here is your unique workspace link:
+              </p>
+              
+              <div className="flex items-center border border-[hsl(var(--border))] rounded-xl p-3 bg-[hsl(var(--card))]">
+                <div className="flex-1 text-sm font-medium truncate text-left">{workspaceUrl}</div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(workspaceUrl);
+                    toast.success('URL Copied!');
+                  }}
+                  className="p-2 ml-2 bg-[hsl(var(--primary-muted))] text-[hsl(var(--primary))] rounded-lg hover:bg-[hsl(var(--primary))]/20 transition-colors shrink-0"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="bg-[hsl(var(--muted))] p-4 rounded-xl">
+                <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                  Redirecting to login in <span className="font-bold text-[hsl(var(--foreground))]">{countdown}</span> seconds...
+                </p>
+                <div className="w-full h-1 bg-[hsl(var(--border))] mt-3 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-[hsl(var(--primary))] transition-all duration-1000 ease-linear"
+                    style={{ width: `${(countdown / 5) * 100}%` }}
+                  />
+                </div>
+              </div>
+              
+              <button
+                type="button"
+                onClick={() => router.push(`/login?slug=${step1Data?.tenantSlug}`)}
+                className="w-full h-11 rounded-xl bg-[hsl(var(--primary))] text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+              >
+                Go to login now
+              </button>
+            </div>
           )}
 
           <p className="text-center text-xs text-[hsl(var(--muted-foreground))] mt-6">
