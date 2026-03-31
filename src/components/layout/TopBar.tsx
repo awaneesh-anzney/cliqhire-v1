@@ -60,21 +60,21 @@ export default function TopBar() {
       </Button>
 
       {/* Search */}
-      <div className="flex-1 max-w-md hidden md:flex">
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
+      <div className="flex-1 max-w-md hidden md:flex ml-4">
+        <div className="relative w-full group">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
           <input
             type="text"
             placeholder="Search candidates, jobs..."
             className={cn(
-              "w-full h-8 pl-9 pr-10 rounded-lg",
-              "bg-background border border-border text-sm",
+              "w-full h-9 pl-10 pr-12 rounded-full",
+              "bg-muted/60 border border-transparent text-sm font-medium",
               "placeholder:text-muted-foreground",
-              "focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary",
-              "transition-colors",
+              "focus:outline-none focus:bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary/50",
+              "transition-all duration-200 shadow-sm",
             )}
           />
-          <kbd className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded font-mono hidden lg:flex items-center">
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-muted-foreground bg-background border border-border/50 px-1.5 py-0.5 rounded-md font-mono hidden lg:flex items-center shadow-sm">
             ⌘K
           </kbd>
         </div>
@@ -159,17 +159,17 @@ export default function TopBar() {
       {user && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2 pl-2 border-l border-border outline-none focus-visible:ring-1 focus-visible:ring-primary rounded-md">
-              <Avatar size="sm">
-                <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold rounded-lg">
+            <button className="flex items-center gap-2.5 pl-4 border-l border-border/50 outline-none focus-visible:ring-2 focus-visible:ring-primary/20 rounded-full hover:bg-muted/40 transition-colors py-1 pr-2">
+              <Avatar size="sm" className="ring-2 ring-background shadow-sm hover:scale-105 transition-transform">
+                <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-xs font-bold rounded-full uppercase">
                   {getInitials(user.name)}
                 </AvatarFallback>
               </Avatar>
               <div className="hidden md:block text-left">
-                <p className="text-xs font-medium leading-none">{user.name}</p>
-                <p className="text-[10px] text-muted-foreground mt-0.5">{user.role?.name}</p>
+                <p className="text-[13px] font-semibold leading-none text-foreground">{user.name}</p>
+                <p className="text-[10px] text-muted-foreground mt-1 tracking-wide uppercase font-medium">{user.role?.name}</p>
               </div>
-              <ChevronDown className="hidden md:block w-3 h-3 text-muted-foreground ml-0.5" />
+              <ChevronDown className="hidden md:block w-3.5 h-3.5 text-muted-foreground opacity-70 ml-1" />
             </button>
           </DropdownMenuTrigger>
 
