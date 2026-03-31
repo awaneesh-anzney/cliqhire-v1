@@ -3,7 +3,7 @@ import { ArrowRight, Play, CheckCircle2, Sparkles } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden bg-white px-4 py-8">
+    <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden bg-white px-4 py-20">
       
       {/* 🔹 Background Effects (Full Width Ambient Light) */}
       <div className="absolute inset-0 w-full h-full -z-10">
