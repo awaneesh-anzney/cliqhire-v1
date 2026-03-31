@@ -170,6 +170,8 @@ export function SidebarMenuItem({
   )
 }
 
+import { Slot } from "radix-ui"
+
 /* ── Menu Button ──────────────────────────────────────────────── */
 
 interface SidebarMenuButtonProps
@@ -181,11 +183,13 @@ interface SidebarMenuButtonProps
 export const SidebarMenuButton = React.forwardRef<
   HTMLAnchorElement,
   SidebarMenuButtonProps
->(({ className, isActive, children, ...props }, ref) => {
+>(({ className, isActive, asChild = false, children, ...props }, ref) => {
   const { collapsed } = useSidebar()
+  const Comp = asChild ? Slot.Root : "a"
+  
   return (
-    <a
-      ref={ref}
+    <Comp
+      ref={ref as any}
       data-slot="sidebar-menu-button"
       data-active={isActive}
       className={cn(
@@ -199,7 +203,7 @@ export const SidebarMenuButton = React.forwardRef<
       {...props}
     >
       {children}
-    </a>
+    </Comp>
   )
 })
 SidebarMenuButton.displayName = "SidebarMenuButton"

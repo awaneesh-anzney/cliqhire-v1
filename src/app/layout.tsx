@@ -1,4 +1,7 @@
+import { QueryProvider } from '@/lib/query-provider';
+import { Toaster } from 'react-hot-toast';
 import './globals.css'
+
 export default function RootLayout({
   children,
 }: {
@@ -6,7 +9,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <QueryProvider>
+          {children}
+          <Toaster position="top-right" />
+        </QueryProvider>
+      </body>
     </html>
   );
 }
