@@ -2,10 +2,10 @@ import type { Metadata } from "next"
 import { Toaster } from "sonner"
 import { QueryProvider } from "@/lib/query-provider"
 import "./globals.css"
-import { JetBrains_Mono } from "next/font/google"
+import { Inter } from "next/font/google"
 import { cn } from "@/lib/utils"
 
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-sans" })
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata: Metadata = {
   title: {
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans antialiased", jetbrainsMono.variable)}>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans antialiased", inter.variable)}>
       <body>
         <QueryProvider>
           {children}

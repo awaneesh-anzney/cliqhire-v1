@@ -42,7 +42,7 @@ export default function TopBar() {
   const unreadCount = notifs?.total ?? 0
 
   return (
-    <header className="h-14 border-b border-border bg-surface flex items-center px-4 gap-3 shrink-0 z-10">
+    <header className="sticky top-0 h-14 border-b border-border bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 flex items-center px-4 gap-3 shrink-0 z-50">
       {/* Desktop sidebar toggle */}
       <div className="hidden lg:flex">
         <SidebarTrigger onClick={() => setCollapsed(!collapsed)} />
@@ -108,8 +108,8 @@ export default function TopBar() {
         {notifOpen && (
           <>
             <div className="fixed inset-0 z-30" onClick={() => setNotifOpen(false)} />
-            <div className="absolute right-0 top-10 z-40 w-80 bg-surface border border-border rounded-xl shadow-lg divide-y divide-border overflow-hidden animate-fade-in">
-              <div className="flex items-center justify-between px-4 py-3">
+            <div className="absolute right-0 top-10 z-40 w-80 bg-background/95 backdrop-blur-xl border border-border rounded-xl shadow-lg divide-y divide-border overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+              <div className="flex items-center justify-between px-4 py-3 bg-muted/50">
                 <span className="text-sm font-semibold">Notifications</span>
                 {unreadCount > 0 && (
                   <button
