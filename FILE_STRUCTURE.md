@@ -1,5 +1,5 @@
 # ATS Frontend — Complete Next.js File Structure
-# Stack: Next.js 14 + TypeScript + TanStack Query + Axios + Zustand + Tailwind
+# Stack: Next.js 16+ TypeScript + TanStack Query + Axios + Zustand + Tailwind
 
 ats-frontend/
 │
